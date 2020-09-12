@@ -50,7 +50,7 @@ void MusicAndEffect::playEffect(const char* effect, int command) {
     }
 }
 
-void MusicAndEffect::MusicVolumeChange(int command) 
+void MusicAndEffect::MusicVolumeChange(int command) {
     float OrigionVolumnMusic = _musicVolume;
     float volumeMusic;
     //change the volume
