@@ -1,16 +1,16 @@
 #include "Functions/MusicAndEffect.h"
 using namespace CocosDenshion;
 
-//if you want to play music or effect, then use the function playMusic or playEffect
-//chonst char* music is the path of the music
-//there are five command,
-//COMMAND_ON_OFF,means turn off
-//COMMAND_OFF_ON,means turn on
-//COMMAND_STILL,means keep still
-//these three command above will only be used in the function playMusic of playEffect
-//COMMAND_VOLUME_INCREASE£¬means increase the volume
-//COMMAND_VOLUME_DECREASE ,means decrease the volume
-//these two command above will only be used in the function MusicVolumeChange of EffectVolumeChange 
+//if you want to play music or effect, then use the function playMusic() or playEffect(), and each of the parameter's meanings are like these:
+//--- chonst char* music is the path of the music
+//there are five commands,
+//--- COMMAND_ON_OFF, means "turn off"
+//--- COMMAND_OFF_ON, means "turn on"
+//--- COMMAND_STILL, means "keep still"
+//these three command above will only be used in the functions playMusic() or playEffect()
+//--- COMMAND_VOLUME_INCREASE£¬means "increase the volume"
+//--- COMMAND_VOLUME_DECREASE, means "decrease the volume"
+//these two commands above will only be used in the functions MusicVolumeChange() or EffectVolumeChange()
 
 bool MusicAndEffect::_effectCondition = true;
 bool MusicAndEffect::_musicCondition = true;
@@ -50,8 +50,7 @@ void MusicAndEffect::playEffect(const char* effect, int command) {
     }
 }
 
-void MusicAndEffect::MusicVolumeChange(int command) {
-    //float OrigionVolumnMusic = SimpleAudioEngine::getInstance()->getBackgroundMusicVolume();
+void MusicAndEffect::MusicVolumeChange(int command) 
     float OrigionVolumnMusic = _musicVolume;
     float volumeMusic;
     //change the volume
@@ -74,7 +73,6 @@ void MusicAndEffect::MusicVolumeChange(int command) {
     _musicVolume = volumeMusic;
 }
 void MusicAndEffect::EffectVolumeChange(int command) {
-    //float OrigionVolumnEffect = SimpleAudioEngine::getInstance()->getEffectsVolume();
     float OrigionVolumnEffect = _effectVolume;
     float volumeEffect;
     //change the volume
