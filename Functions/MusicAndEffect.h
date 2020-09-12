@@ -8,17 +8,15 @@
 
 class MusicAndEffect {
 private:
-	//bool _doContinueGame;
-	CC_SYNTHESIZE(bool, _effectCondition, EffectCondition);
-	CC_SYNTHESIZE(bool, _musicCondition, MusicCondition);
-	CC_SYNTHESIZE(float, _effectVolume, EffectVolume);
-	CC_SYNTHESIZE(float, _musicVolume, MusicVolume);
+	static bool _effectCondition;
+	static bool _musicCondition;
+	static float _effectVolume;
+	static float _musicVolume;
 public:
-	MusicAndEffect(bool effectCondition,bool musicCondition,float effectVolume, float musicVolume);
-	void playMusic(const char* music, bool loop, int command);
-	void playEffect(const char* effect, int command);
-	void MusicVolumeChange(int command);
-	void EffectVolumeChange(int command);
+	static void playMusic(const char* music, bool loop, int command);
+	static void playEffect(const char* effect, int command);
+	static void MusicVolumeChange(int command);
+	static void EffectVolumeChange(int command);
 };
 
 #endif // __SOUND_H__

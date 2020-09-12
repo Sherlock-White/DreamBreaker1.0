@@ -11,12 +11,11 @@ using namespace CocosDenshion;
 //COMMAND_VOLUME_INCREASE£¬means increase the volume
 //COMMAND_VOLUME_DECREASE ,means decrease the volume
 //these two command above will only be used in the function MusicVolumeChange of EffectVolumeChange 
-MusicAndEffect::MusicAndEffect(bool effectCondition, bool musicCondition, float effectVolume, float musicVolume) {
-    _effectCondition = effectCondition;
-    _musicCondition = musicCondition;
-    _effectVolume = effectVolume;
-    _musicVolume = musicVolume;
-}
+
+bool MusicAndEffect::_effectCondition = true;
+bool MusicAndEffect::_musicCondition = true;
+float MusicAndEffect::_effectVolume = 0.5;
+float MusicAndEffect::_musicVolume = 0.5;
 
 void MusicAndEffect::playMusic(const char* music, bool loop, int command) {
     //command is to change the condition of music
@@ -52,7 +51,8 @@ void MusicAndEffect::playEffect(const char* effect, int command) {
 }
 
 void MusicAndEffect::MusicVolumeChange(int command) {
-    float OrigionVolumnMusic = SimpleAudioEngine::getInstance()->getBackgroundMusicVolume();
+    //float OrigionVolumnMusic = SimpleAudioEngine::getInstance()->getBackgroundMusicVolume();
+    float OrigionVolumnMusic = _musicVolume;
     float volumeMusic;
     //change the volume
     if (command == COMMAND_VOLUME_INCREASE) {
@@ -74,7 +74,8 @@ void MusicAndEffect::MusicVolumeChange(int command) {
     _musicVolume = volumeMusic;
 }
 void MusicAndEffect::EffectVolumeChange(int command) {
-    float OrigionVolumnEffect = SimpleAudioEngine::getInstance()->getEffectsVolume();
+    //float OrigionVolumnEffect = SimpleAudioEngine::getInstance()->getEffectsVolume();
+    float OrigionVolumnEffect = _effectVolume;
     float volumeEffect;
     //change the volume
     if (command == COMMAND_VOLUME_INCREASE) {
