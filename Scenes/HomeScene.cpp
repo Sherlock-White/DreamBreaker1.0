@@ -25,13 +25,17 @@
 #include "Scenes/HomeScene.h"
 #include "SimpleAudioEngine.h"
 #include "Functions/createAnimate.h"
+#include "Functions/MusicAndEffect.h"
 #include "Constant.h"
 
 USING_NS_CC;
 
 Scene* Home::createScene()
 {
-    return Home::create();
+    auto scene = Scene::create();
+    auto layer = Home::create();
+    scene->addChild(layer, 0);
+    return scene;
 }
 
 // Print useful error message instead of segfaulting when files are not there.
@@ -44,77 +48,103 @@ static void problemLoading(const char* filename)
 // on "init" you need to initialize your instance
 bool Home::init()
 {
-    if ( !Scene::init() )
+    if ( !Layer::init() )
     {
         return false;
     }
+    //////////////////////////home map inicialize/////////////////////////
+    _tileMap = TMXTiledMap::create("councelingRoomMap.tmx");
+    addChild(_tileMap, 0, HOME_MAP);
 
-    //map
-    auto map = TMXTiledMap::create("councelingRoomMap.tmx");
-    addChild(map, 0, HOME_MAP);
-    //sofa
+    TMXObjectGroup* group = _tileMap->getObjectGroup("objects");
+    //ValueMap spawnPoint = group->getObject("doctor");
+    //float x = spawnPoint["x"].asFloat();
+    //float y = spawnPoint["y"].asFloat();
+
+
     auto sofa = Sprite::create("councelingRoom/counselingRoom_sofa.png");
-    float sofaX = FRAME_SIZE_X*0.57;
-    float sofaY = FRAME_SIZE_Y*0.4;
-    sofa->setAnchorPoint(Vec2(0, 0));
-    sofa->setPosition(Vec2(sofaX, sofaY));
-    addChild(sofa, 1);
-    //flower
     auto flower = Sprite::create("councelingRoom/counselingRoom_flower.png");
-    float flowerX = FRAME_SIZE_X * 0.9;
-    float flowerY = FRAME_SIZE_Y * 0.45;
-    flower->setAnchorPoint(Vec2(0, 0));
-    flower->setPosition(Vec2(flowerX, flowerY));
-    addChild(flower, 1);
-    //teaTable
     auto teaTable = Sprite::create("councelingRoom/counselingRoom_teaTable.png");
-    float teaTableX = FRAME_SIZE_X * 0.1;
-    float teaTableY = FRAME_SIZE_Y * 0.06;
-    teaTable->setAnchorPoint(Vec2(0, 0));
-    teaTable->setPosition(Vec2(teaTableX, teaTableY));
-    addChild(teaTable, 1);
-    //teaCup
     auto teaCup = Sprite::create("councelingRoom/counselingRoom_teaCup.png");
-    float teaCupX = FRAME_SIZE_X * 0.12;
-    float teaCupY = FRAME_SIZE_Y * 0.12;
-    teaCup->setAnchorPoint(Vec2(0, 0));
-    teaCup->setPosition(Vec2(teaCupX, teaCupY));
-    addChild(teaCup, 1);
-    //book
     auto book = Sprite::create("councelingRoom/counselingRoom_book.png");
-    float bookX = FRAME_SIZE_X * 0.17;
-    float bookY = FRAME_SIZE_Y * 0.11;
-    book->setAnchorPoint(Vec2(0, 0));
-    book->setPosition(Vec2(bookX, bookY));
-    addChild(book, 1);
-    //doctor
+    initSprites(sofa, flower, teaTable, teaCup, book);
+
+    //////////////////////////////////////hero inicialize//////////////////////////////////////////
     auto animateStanding = CreateAnimate::create("Doctor/DoctorStanding.plist", 20, 2, "DoctorStanding%04d", 0.5f);
     auto animateMove = CreateAnimate::create("Doctor/DoctorMove.plist", 20, 2, "DoctorMove%04d", 0.5f);
-    auto doctor = Sprite::create();
-    addChild(doctor,2);
-    doctor->setPosition(233, 466);
-    doctor->runAction(RepeatForever::create(animateStanding));
 
-    //auto animate = CreateAnimate::create("saberMove.plist", 20, 7, "saberMove%04d", 0.13f);
-    //auto sprite = Sprite::create();
-    //addChild(sprite);
-    //sprite->setScale(3);
-    //sprite->setPosition(233, 233);
-    //sprite->runAction(RepeatForever::create(animate));
-    //auto knightMoveListener = EventListenerKeyboard::create();
-
-    //knightMoveListener->onKeyPressed = [=](EventKeyboard::KeyCode code, Event* e)
-    //{
-    //    keys[code] = true;
-    //};
-
-    //knightMoveListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event)
-    //{
-    //    keys[keyCode] = false;
-    //};
-    //_eventDispatcher->addEventListenerWithSceneGraphPriority(knightMoveListener, this);
+    _player = Sprite::create("Doctor/doctor.png");
+    addChild(_player,2);
+    _player->setPosition(233, 466);
+    _player->runAction(RepeatForever::create(animateStanding));
 
     return true;
+}
+
+void Home::initSprites(cocos2d::Sprite* obj1, cocos2d::Sprite* obj2, cocos2d::Sprite* obj3, cocos2d::Sprite* obj4, cocos2d::Sprite* obj5) {
+    //sofa
+    float sofaX = FRAME_SIZE_X * 0.57;
+    float sofaY = FRAME_SIZE_Y * 0.4;
+    obj1->setAnchorPoint(Vec2(0, 0));
+    obj1->setPosition(Vec2(sofaX, sofaY));
+    addChild(obj1, 1);
+    //flower
+    float flowerX = FRAME_SIZE_X * 0.9;
+    float flowerY = FRAME_SIZE_Y * 0.45;
+    obj2->setAnchorPoint(Vec2(0, 0));
+    obj2->setPosition(Vec2(flowerX, flowerY));
+    addChild(obj2, 1);
+    //teaTable
+    float teaTableX = FRAME_SIZE_X * 0.1;
+    float teaTableY = FRAME_SIZE_Y * 0.06;
+    obj3->setAnchorPoint(Vec2(0, 0));
+    obj3->setPosition(Vec2(teaTableX, teaTableY));
+    addChild(obj3, 1);
+    //teaCup
+    float teaCupX = FRAME_SIZE_X * 0.12;
+    float teaCupY = FRAME_SIZE_Y * 0.12;
+    obj4->setAnchorPoint(Vec2(0, 0));
+    obj4->setPosition(Vec2(teaCupX, teaCupY));
+    addChild(obj4, 1);
+    //book
+    float bookX = FRAME_SIZE_X * 0.17;
+    float bookY = FRAME_SIZE_Y * 0.11;
+    obj5->setAnchorPoint(Vec2(0, 0));
+    obj5->setPosition(Vec2(bookX, bookY));
+    addChild(obj5, 1);
+}
+
+void Home::onEnter() {
+    Layer::onEnter();
+    //Listener
+    auto doctorMoveListener = EventListenerKeyboard::create();
+    doctorMoveListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
+        //keys[keyCode] = true;
+    };
+    doctorMoveListener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event) {
+        //keys[keyCode] = false;
+    };
+    EventDispatcher* eventDispatcher = Director::getInstance()->getEventDispatcher();
+    eventDispatcher->addEventListenerWithSceneGraphPriority(doctorMoveListener, this);
+    
+    //Music
+    MusicAndEffect::playMusic("music/main theme.mp3", true, COMMAND_OFF_ON);
+}
+
+void Home::onEnterTransitionDidFinish() {
+    Layer::onEnterTransitionDidFinish();
+}
+
+void Home::onExit() {
+    Layer::onExit();
+}
+
+void Home::onExitTransitionDidStart() {
+    Layer::onExitTransitionDidStart();
+}
+
+void Home::cleanup() {
+    Layer::cleanup();
 }
 
 void Home::menuCloseCallback(Ref* pSender)

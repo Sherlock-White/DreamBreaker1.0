@@ -27,12 +27,22 @@
 
 #include "cocos2d.h"
 
-class Home : public cocos2d::Scene
+class Home : public cocos2d::Layer
 {
+private:
+    cocos2d::TMXTiledMap* _tileMap;
+    cocos2d::Sprite* _player;
 public:
     static cocos2d::Scene* createScene();
 
     virtual bool init();
+    void initSprites(cocos2d::Sprite* obj1, cocos2d::Sprite* obj2, cocos2d::Sprite* obj3, cocos2d::Sprite* obj4, cocos2d::Sprite* obj5 );
+
+    virtual void onEnter();//×¢²á¼àÌýÆ÷
+    virtual void onEnterTransitionDidFinish();
+    virtual void onExit();//×¢Ïú¼àÌýÆ÷
+    virtual void onExitTransitionDidStart();
+    virtual void cleanup();
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
